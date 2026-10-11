@@ -1,0 +1,37 @@
+
+name: CI AgroStore
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes unitários
+        run: npm run test -- --run
+
+      - name: Instalar navegador do Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Executar testes E2E
+        run: npm run test:e2e
+
+      - name: Gerar versão de produção
+        run: npm run build
