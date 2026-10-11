@@ -1,4 +1,13 @@
-import { Button, Card, Image, Stack, Text, Title } from '@mantine/core'
+
+import {
+  Button,
+  Card,
+  Image,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { Link } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import type { Product } from '../types/Product'
@@ -9,6 +18,17 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart()
+
+  function handleAddToCart() {
+    addToCart(product)
+
+    notifications.show({
+      title: 'Produto adicionado!',
+      message: `${product.title} foi adicionado ao carrinho.`,
+      color: 'green',
+      autoClose: 3000,
+    })
+  }
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -29,9 +49,7 @@ function ProductCard({ product }: ProductCardProps) {
           R$ {product.price.toFixed(2)}
         </Text>
 
-        <Button
-          onClick={() => addToCart(product)}
-        >
+        <Button onClick={handleAddToCart}>
           Adicionar ao carrinho
         </Button>
 
