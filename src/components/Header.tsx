@@ -1,9 +1,17 @@
+
 import { Button, Container, Group, Text } from '@mantine/core'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
 
 function Header() {
   const { isAuthenticated, logout } = useAuth()
+  const { items } = useCart()
+
+const totalItems = items.reduce(
+  (total, item) => total + item.quantity,
+  0,
+)
 
   return (
     <header>
@@ -29,6 +37,14 @@ function Header() {
             >
               Produtos
             </Button>
+
+            <Button
+            component={NavLink}
+            to="/carrinho"
+            variant="light"
+          >
+            🛒 Carrinho ({totalItems})
+          </Button>
 
             {isAuthenticated ? (
               <>
